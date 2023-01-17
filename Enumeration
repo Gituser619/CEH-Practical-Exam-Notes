@@ -1,0 +1,172 @@
+Enumeration
+	1. NetBIOS enumeration(137-139 TCP/UDP)- first target
+		Perform nmap to find ports 137(udp)-139(tcp)- leads you to shared resources file/printers
+    
+		○ Windows command-line utilities
+			>net use 
+				List of all available share folders
+			>nbtstat
+				-a 	display NetBIOS table of remote systems
+				-c	Lists the cached table
+			
+		○ NetBIOS Enumerator(Win exe)*
+			§ Supports NetBIOS and SMB
+			§ Enumerates for NetBIOS names, usernames, domain, Mac Address, when given IP 
+		
+		○ NSE Script
+			§ nbstat	Results in netBIOS name/mac and all names associated with the system
+			
+	2. SNMP enumeration(port 161/162UDP)
+			§ Perform Nmap UDP scan to find udp port 161, and 162- leads you to many device info including usernames
+			§ After NetBIOS enumeration, perform SNMP enumeration for hosts, routers, devices, and shares on the network, Username 
+			§ SNMP enum creates a list of the user account and devices on a target
+			§ Agent runs on client
+      
+		○ snmp-check*
+			§ Linux command
+			§ Default community string
+			§ Goal to find the community string
+			$snmp-check <Target IP>
+      
+		○ SoftPerfect Network Scanner(win exe)
+			§ Launch program> Options> remote SNMP> select all the options > close window- place the target IP  ……….
+			
+		○ SnmpWalk(Lin command)
+			§ Identifies a set of variables that are available for accessing the target network. 
+			§ Shows the OID values
+				$snmpwalk -v<1,2c,4> -c public <targetIP>
+					The result displays data transmitted from the SNMP agent to the SNMP server
+		○ Nmap
+			§ $nmap -sU -p161 --script <scripts> <IP>
+			snmp-sysdescription 	Scripts results in type of OS
+			snmp-win32-software	List of apps running on the target
+			snmp-processes	Results in a list of snmp processes along with the associated ports
+			snmp-interface	List of OS,NICs, and apps
+			snmp-win32-users	
+      
+	3. LDAP enumeration(389/Udp)
+		○ Perform LDAP Enum next, to access directories with AD or other directory services
+			§ LDAP allows you to gather information about usernames, addresses, departments and server name
+			§ Client start a LDAP session by connecting to a DSA(port 389/TCP)
+      
+		○ Active Directory Explorer (Win exe)
+			§ Allows you to view and edit domain controlled values values
+			§ Just plug in the IP 
+      
+		○ Python and Nmap
+			§ Nmap
+				$nmap -p 389 --script ldap-brute --script-args ldap.base=' "cn=user,dc=<Domain>,dc=com"' <LDAP server IP>
+				Nmap attempts to brute-force LDAP authentication and displays the usernames that are found
+					ldap-brute 	Brute force LDAP auth
+					Ldap.base	Script will use it as a base for the password guessing attampts
+					
+			§ Python
+				1. Load python
+				2. >>> import ldap3
+				3. >>>server=ladp3.Server('<target IP>',get_info=ldap3.ALL,port=389)
+				4. >>>connection=ldap3.Connection(server)
+				5. >>>connection.bind()
+				6. >>>server.info 
+				7. >>>connection.search(search_base='DC=CEH,DC=com', search_filter='(&(objectclass=*))', search_scope='SUBTREE', attributes='*')
+				8. >>>connection.search(search_base='DC=CEH,DC=com', search_filter='(&(objectclass=person))', search_scope='SUBTREE', attributes='userpassword')
+				9. >>>connection.entries
+				
+		○ Ldapsearch(Lin CLI)
+			§ Shell accessible interface to the LDAPserach ext(3) library
+			1. First gather information about the target
+				$ldapsearch -h <targetIP> -x -s base namingcontexts
+				-x	Simple auth
+				-h	Host
+				-s	Scope
+
+			2. Obtain more info about the domain 
+			$ldapsearch -h <target IP> -x  <>
+				-b "DC=CEH,DC=com"	Specifies the base DN
+				-b "DC=CEH,DC=com" "objectclass=*"	Enum for AD users
+				
+				
+				
+	4. NFS enumeration(Port 2049/TCP)
+		Identify exported directories and extract a list of clients connected to the server, along with their IP addresses and share data associated with them 
+		○ RPCScan and SuperEnum
+			1. SuperEnum
+				□ Performs basic enum on ports(open ports and the services running)
+					$cd SuperEnum
+					$echo "<tartgetIP>" | tee Target.txt
+					$sh SuperEnum
+						>Target.txt
+			2. RPCScan
+				□ Communicates with RPC Services and checks misconfigured NFS shares.
+				□ It lists services mountpoints and directories accessible via NFS
+					$cd RPCScan
+					$python3 rpc-scan.py <target> --rpc
+						Lists open ports and the services running
+						
+	5. DNS enumeration
+		○ zone transfer
+			§ Windows
+				□ Nslookups(review)
+			§ Linux
+				□ $dig <option> <target>
+					□ Empty	 looks up the IP of the domain
+					□ ns	Looks up the DNS server name that stories that registery
+					□  axfr	Retrieves zone information
+				□ $dig @<ns server> <target domain> axfr
+				
+		○ DNSSEC zone walking******
+			§ Used to obtain the internal records of the target DNS server if the DNS zone is not propoerly configured
+			$cd dnsrecon
+			$python3 dnsrecon.py -d <domain> -z
+				-z	DNSSEC zone walk option
+	
+		○ Nmap
+		
+		$nmap --script <scrip> <Target>
+			broadcast-dns-service-discovery
+				Displays a list of all availble DNS services on the targethost along with therir assocviated ports
+			dns-brute
+				Results in a list of subdomains associated with the target host along with there address
+        
+	6. SMTP Enumeration(Ports25,587,252)
+		Perform enum against the MX servers thatyou found with the DNS enum
+		
+		Goal- obtain a list of valid users, delivery addresses, message recipients on an SMTP server
+		○ Ports25,587,2525,/tcp
+    
+		○ Perform SMTP enumeration using Nmap
+			--script
+			smtp-enum-users	List of mail users on the target machine
+			Smtp-open-replay	List of open SMTP relay on the target Machine
+			Smtp-commands	List of all SMTP commands available in the NMAP directory
+      
+	7.  RPC, SMB, and FTP enumeration
+		RPC- enumerates RPC enabled endpoints that are vulnerable 
+		SMB- enables banner grabbing which obtain OS /version data of service
+		FTP- yields info about any running ftp service for attacker like ftp boaunc/brute force, packet sniffing 
+		○ Perform SMB and RPC enumeration using NetScanTools Pro
+			§ SMB: Manual tools> SMB scanner: displays info about NETBIOS Name, DNS value, SMB version, and shares for each IP
+			§ 
+			§ RPC
+			*nix RPC info
+				Displays RPC info of the target machine
+			
+		○ Perform RPC, SMB, and FTP enumeration using Nmap
+			$nmap -p21 -A <IP>
+      
+	8.  various enumeration tools
+		○ Enumerate information using Global Network Inventory
+    
+		○ Enumerate network resources using Advanced IP Scanner
+		
+		○ Enum4linux:Enumerate information from Windows and Samba hosts using 
+			§ Used to enumerate info from windows and samba system
+			§ Enumerates for passwords policy, ID of remote host, detect host of workgroup and domains, user listing on hosts, listing group membership info.
+				$enum4linux -u <user> -p <pass> -n <target IP>
+					-a	all
+					-n	Nbstat lookup
+					-u	Single username
+					-U	List of username
+					-o	OS info
+					-G 	Retrieved group/member
+					-S	Retrieves sharedlist
+					-P	Retrieved password policy
