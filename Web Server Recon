@@ -1,0 +1,55 @@
+Hacking Web Servers
+Goal: learn about the server remote access capabilities
+		○ Ghost Eye: Info gathering  
+			§ Python
+			§ Gathers; whois, DNS lookup, EtherApe, NMAP port scan, HTTP header, clickjacking test, robot,txt scan. Link grabber, IP finder, and traceroute 
+				$cd ghost_eye
+				$python3 ghost_eye.py
+					Option>3
+					Option>6 = clickjacking
+          
+		○  Skipfish: web server recon using  (Web server Directory Brute force)
+			§ Performs recursive crawl and dictionary based probes
+			§ Result is used to access security report
+			$skipfish -o <output_report directory> -S /usr/share/skipfish/directories/complete.wl http://< ip>:<port>
+				Report can be found in the index.html
+				Performs a directory bruteforce method
+				□ Finds vulnerability while also including trace
+				
+		○ httprecon Tool: footprinting a web server 
+			§ Win exe
+			§ advance banner grabbing, status code enum and header ordering 
+			
+		○ ID Serve: Footprinting a web server  (identifies server engine)
+			§ Win exe
+			§ Allows attackers to determine a remote target system application. The type of server 
+      
+		○ Netcat and Telnet: footprinting a web server 
+			§ Netcat- banner grabbing
+				$nc -vv  <target> <port>
+					>GET / HTTP/1.0
+					
+			§ Telnet
+				$telnet <target> <port>
+					>GET / HTTP/1.0
+          
+		○ Enum web server w/ Nmap Scripting Engine (NSE)
+			§ Script options 
+				http-enum	 records(registry, apps)
+				hostmap-bfk	
+				http.trace	sends HTTP trace request 
+				http-waf-detect	 detects web app fw
+        
+		○ Uniscan: web server fingerprinting(can be used to find directories)****
+		Performs simple command while performing dynamic and stress checks on webserver
+			$uniscan -u http://<url>:<port>/<folder> -<options below>
+				-q	 searches for directories in a server (first step)
+				-we	 looks for robots.txt(w) and sitemap.xml(e )
+				-d	 obtains Info about email id, source node disclosure, and external host, and web backdoors.
+				Reports > /usr/share/uniscan/report
+        
+ web server attack
+		○ Bruteforce credentials using a Dictionary Attack
+			1. Find hosts with ftp 
+			2. Use a wordlist and hydra to crack the username and passwords
+				$hydra -L <userlist.txt> -P <Passlist.txt> <ftp|smb>://<target IP>
