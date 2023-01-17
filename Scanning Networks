@@ -1,0 +1,151 @@
+Scanning Networks
+	• Port Scanning: Lists open ports and services
+	• Network Scanning: Lists the active hosts and IP addresses
+	• Vulnerability Scanning: Shows the presence of known weaknesses
+
+	1. host discovery
+		○  Nmap
+			$nmap <option> <target>
+			-PR	 ARP
+			-PU	 UDP
+			-PE	 ICMP
+			-PP	ICMP timestamps
+			-PM	 ICMP Mask address
+			-PS	 sends SYN
+			-PA	 TCP ACK
+			-P0	 sends different probe
+			Try to look up the difference
+			
+		○ Angry IP Scanner(Windows exe)
+			§ GUI verion -----
+				□ Provide easy to read live hosts 
+        
+	2. Port and Service discovery
+		○ MegaPing(Win exe)
+			§ Used to detect live host/open ports/open shared resources/services/drivers active on the computer/key registery/ user and groups
+      
+		○ NetScanTools Pro(win EXE)
+			§ Gathers info on the internet and troubleshoots network.
+      
+		○  sx tool
+			§ Used to perform ARP scan/ICMP/SYN/UDP/App/docker/ and elastic search scan
+			§ Does not account for the local IP
+				$sx arp <target/Submask>
+				$sx arp <target/Submask> --json | tee file.json
+				$cat file.json | sx tc -p 1-65535 <target>
+        
+		○ Nmap
+			-sU	The UDP ping scan sends UDP packets to the target host; a UDP response means that the host is active. If the target host is offline or unreachable, various error messages such as “host/network unreachable” or “TTL exceeded” could be returned.
+			-sA	The ACK flag probe scan sends an ACK probe packet with a random sequence number; no response implies that the port is filtered (stateful firewall is present), and an RST response means that the port is not filtered.
+			-sS	The stealth scan involves resetting the TCP connection between the client and server abruptly before completion of three-way handshake signals, and hence leaving the connection half-open. This scanning technique can be used to bypass firewall rules, logging mechanisms, and hide under network traffic.
+			-sX	Xmas scan sends a TCP frame to a target system with FIN, URG, and PUSH flags set. If the target has opened the port, then you will receive no response from the target system. If the target has closed the port, then you will receive a target system reply with an RST.
+			-sM	In the TCP Maimon scan, a FIN/ACK probe is sent to the target; if there is no response, then the port is Open|Filtered, but if the RST packet is sent as a response, then the port is closed.
+			-sN	Null scan
+			-sY	SCTP INIT scan
+			-sl  lower L	Idle scan
+			-sZ	SCTP Cokkie 
+			-sV	Version
+			-sA	OS/Version/Port/traceroute
+			
+		○  Hping3 techniques  
+			§ Supports TCP/UDP/ICMP, Raw IP
+			$hping3 -A <target> -p80 -c 5
+			
+				-A	Ack Flag
+				-c	Count
+				-p	T
+				-8 or --scan	Groups of ports 
+				-S or --syn	SYN Flag
+				-V	Verbose
+				-F	Fin Flag
+				-P 	Push flag
+				-U	URG
+				-1	ICMP
+				--rand-dest	Randomizes destination
+				-I <eth0>upper I	Interface
+				-2	UDP
+	
+	1. OS discovery
+		○ OS with Time-to-Live (TTL) wireshark
+		Lin 64 TTL
+    win 128 TTL
+		○ OS discovery using Nmap Script Engine (NSE)
+			$nmap --script <NSE option> <target>
+				smb-os-discovery
+					Attempt to determine the OS, Computer name, domain name, workgroup and current time over the SMB protocol(445/139)
+				Or 
+				-O for OS info
+        
+		○  OS discovery using Unicornscan
+			§ Lin CLI
+			§ Asynchronies TCP/UDP port scanner and banner grabber that enables you to discover open ports, services, ttl values
+			§ $unicornscan <-option> <target-ip>
+				Options
+					-I 	(upper i) immediate mode:?
+					-v 	 verbose
+				
+	2. Scan -  IDS and Firewall
+			§ Goal- scan the network w/o being caught  /detect and bypass firewall security 
+			§ Techniques
+				□ Packet Fragmentation
+				□ source routing
+				□ Source port manipulation
+				□ IP address Decoy
+				□ IP address spoofing
+				□ Creating custom packets
+				□ Randomizing host
+				□ Bad checksum
+				□ Proxy server
+				□ anonymizer
+        
+		○  evasion techniques
+			§ Using Nmap
+				□ -f	Fragmentation
+				-g <source port>	Source port
+				Or --source-port <>
+				-mtu <byte size>	Specifies the # if MTU. 
+				-D RND:10	-D decoy, RND:10- generates 10 random IP 
+				-sT	Full tcp scan
+				-Pn	Disables host discovery
+				--spoof-mac <# of macs>	Randomizes X number of macs
+				
+		○  custom packets builder:  Colasoft Packet Builderl
+			§ Win exe
+			§ Allows you to create packets, decode/ascii/hexi editor to create packets
+			§ It has a Decode Editor and Hex Editor
+			
+		○  custom UDP and TCP packets : Hping
+			$hping3
+				--udp	
+				--rand-source	Enables random source IP mode
+				--date <#>	Specifies packet body size
+				-S	Stealth/syn only
+				--flood	TCP flooding 
+				
+	1. various scanning tools
+		○ Scan using Metasploit
+			1. Launch Metasploit and run a nmap scan
+				msf6>nmap -sS -Pn -oX <fileX> <targetAdd>/<subnet>
+			2. Import db to metasploit
+				msf6>db_import <fileX>
+			3. Get the output- 
+				>hosts	this will result in a list of info of the detected hosts
+				>services	this will result in a list of info of the hosts services
+			1. Search for a module with port scan
+			2. Load it 
+			3. Set the RHOST/PORTS/THREAD and run
+
+Evading IDS, Firewalls, and Honeypots
+	1.  evasion techniques
+		○ Nmap evasion techniques
+			§ Zombie scan
+				$nmap -sI <spoofed live host IP that’s on the network> <target IP>
+		○  HTTP/FTP tunneling- todo
+		○  Windows BITSAdmin
+			Powershell> bitadmin /transfer <local file> http://< ftp server.com>/<folder>/<new Name> C:\<filenmae>
+			
+Session Hijacking
+	1.  session hijacking
+		○ Hetty or Bettercap- intercept HTTP traffic
+	2. Detect  hijacking
+		○ Wireshark
