@@ -1,0 +1,49 @@
+Cryptography
+
+	1. Encrypt the information
+		○  HashCalc
+			§ Windows exe
+			§ Performs multiple hashes/checksums against a file/text/hexstring
+			
+		○  MD5 Calculator
+			§ Windows exe
+			§ Generates MD5 checksum of LARGE files
+      
+		○  HashMyFiles
+			§ Supports MD5 and SHA1
+      
+		○  CryptoForge
+			§ Window exe
+			§ Text/file encryption
+			§ File encryption software- right click on a software(app needs to be running)
+			
+		○  BCTextEncoder
+			§ Windows exe
+			§ Compresses/encrypts/ converts to text format
+			
+	2. self-signed certificate
+		○  self-signed certificates
+			§ Go to ISS>Server Certificates>Create Self-Signed Certiacate>
+      
+	3.  email encryption
+		○  RMail
+    
+	4. Perform disk encryption
+		○  VeraCrypt
+			§ Win exe 
+			§ On the fly encrypted volume. Saved as a file
+		
+		○  BitLocker Drive Encryption
+			§ Offline data and OS protection tool provided by TRM
+      
+		○ Rohos Disk Encryption
+			§ Creates hidden and password protected partition on a system/USB. NIST approved 
+			§ AES256
+			
+	5. Cryptanalysis tools
+		○ CrypTool
+    
+		○ AlphaPeeler: cryptanalysis using 
+		
+		
+		
