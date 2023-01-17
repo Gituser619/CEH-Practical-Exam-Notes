@@ -1,0 +1,53 @@
+active sniffing
+		○ Macof: MAC flooding 
+			§ Goal is to force a switch to act as a hub
+			$macof -i eth0 -n 10 <optional -d>
+				-i	 interface
+				-n 	 # of packets
+				-d <target>	 destination+
+				
+		○ Yersinia: DHCP starvation attack 
+			$yersinia -I 
+				□ Press h for help
+				□ Press F2 for DHCP 
+				□ Press X for list of attacks
+				□ Press 1 for "discover packet which starts starvation attack
+
+		○ Arpspoof: ARP poisoning  
+			§ Changes the IP of attacker computer to the IP address of the targets computer
+				$arpspoof -i eth0 -t <gateway> <targetip>
+
+		○ Cain & Abel- Man-in-the-Middle (MITM) attack  
+			§ Win exe
+			§ Cain+abel= password recovery tool that allows the recovery of passwords by sniffing the network and cracking excrpted password
+			1. Open cain> and make sure that the IP is correctly set n the configuration tab
+			2. Start the sniff proccess
+			3. Scan the network-Click the sniffer tab and select the + button
+			
+		○ TMAC and SMAC- Spoof a MAC address
+		○ macchanger- Spoof a MAC address of Linux machine  
+			$ifconfi <interface> down
+				□ First bring the system's nic down
+			$macchanger -s <interface> 
+				 show Mac
+			$macchaner -r -a <interface>  
+				configures a random mac
+			$ifconfi <interface> up
+			
+	2.  network sniffing tools
+		○  Wireshark password sniffing  
+			1. Filtler the capture with the following 
+				http.request.method==POST
+			2. Next find the txtpwd string ?????
+				Edit> Find Packet> set the thrid box to "string", first box to "packet details", and second box to " Narrow" 
+
+		○ Omnipeek Network Protocol Analyzer - Analyze a network  
+		○ SteelCentral Packet Analyzer- Analyze a network
+    
+	3. Detect network sniffing?????
+		Wireshark> Expert info tab
+		○ Detect ARP poisoning and promiscuous mode 
+			Nmap script
+				□  $nmap --script sniff-detect <ip>/<subnet>
+        
+		○ Capsa Network Analyzer-Detect ARP poisoning 
