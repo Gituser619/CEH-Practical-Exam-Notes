@@ -1,0 +1,37 @@
+ Wireless Networks
+	
+	
+		○ Crack a WEP network using Aircrack-ng
+			§ $aircrack-ng <pcap file>
+			By issuing the above command aircrack-ng will crack the WEP key of the CEHLabs
+			
+			
+		○ Crack a WPA2 network using Aircrack-ng
+			§ $aircrack-ng -a2 -b <Target BSSID> -w <password_Wordlist.txt> <WP2 PCAP file>
+			
+			-a is the technique used to crack the handshake, 2=WPA technique.
+			-b refers to bssid; replace with the BSSID of the target router.
+			-w stands for wordlist; provide the path to a wordlist.
+      
+    ____________________________________________________________________
+Cloud Computing
+	1.  S3 bucket enumeration 
+		○ Llazys3
+			§ lazys3 is a Ruby script tool that is used to brute-force AWS S3 buckets using different permutations.
+			§ This tool obtains the publicly accessible S3 buckets and also allows you to search the S3 buckets of a specific company by entering the company name.
+			$cd lazys3-master
+			$ruby lazys3.rb
+			$ruby lazys3.rb <company name>
+
+		○  S3Scanner
+		This tool obtains the publicly accessible S3 buckets and also allows you to search the S3 buckets of a specific company by entering the company name.
+			$cd S3Scaner
+			$pip3 install -r requirements.txt
+			$python3 ./s3scanner.py site.txt
+				□ sites.txt is a text file containing the target website URL that is scanned for open S3 buckets. You can edit the sites.txt file to enter the target website URL of your choice
+			$python3 ./s3scanner.py --include-closed --out-file found.txt --dump names.txt
+				Dump all open buckets and log both open and closed buckets in found.txt
+			$python3 ./s3scanner.py names.txt
+				Just log open buckets in the default output file (buckets.txt)
+			$python ./s3scanner.py --list names.txt
+				Save the file listings of all open buckets to a file
